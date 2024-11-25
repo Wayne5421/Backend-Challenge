@@ -3,7 +3,6 @@ from models.user import User
 from models.role import Role
 from db import db
 
-# Função para obter o papel (role) de um usuário específico
 def get_role_by_user_id(user_id):
     user = db.session.query(User).filter_by(id=user_id).first()
     

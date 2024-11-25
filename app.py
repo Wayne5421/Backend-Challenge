@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from dotenv import load_dotenv
 from db import init_db
-from services.create_user_service import create_user
-from services.get_role_by_user_id_service import get_role_by_user_id
-from services.get_user_claims_service import get_user_claims
 
+from routes.create_user_route import create_user_route
+from routes.get_role_by_user_id_route import get_role_by_user_id_route
+from routes.get_user_claims_route import get_user_claims_route
 
 load_dotenv()
 
@@ -12,18 +12,9 @@ app = Flask(__name__)
 
 init_db(app)
 
-@app.route('/user_claims', methods=['GET'])
-def user_claims():
-    return get_user_claims()
-
-@app.route('/role_by_user_id/<int:user_id>', methods=['GET'])
-def role_by_user_id(user_id):
-    return get_role_by_user_id(user_id)
-
-@app.route('/create_user', methods=['POST'])
-def create_new_user():
-    data = request.json
-    return create_user(data)
+app.register_blueprint(create_user_route, url_prefix='/api')
+app.register_blueprint(get_role_by_user_id_route, url_prefix='/api')
+app.register_blueprint(get_user_claims_route, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True)

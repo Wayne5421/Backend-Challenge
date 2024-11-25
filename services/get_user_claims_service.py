@@ -5,7 +5,6 @@ from models.claim import Claim
 from models.user_claim import UserClaim
 from db import db
 
-# Função para obter claims de usuários
 def get_user_claims():
     result = db.session.query(
         User.name.label('user_name'),
