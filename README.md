@@ -270,7 +270,7 @@ http://127.0.0.1:5000
 
 <br><br>
 
-## 🚀✨ Deploy Simplificado para Produção <br>
+## 🚀 Deploy para Produção <br>
 
 ### 🛠️ Requisitos <br>
 
