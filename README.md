@@ -330,10 +330,10 @@ Antes de iniciar o deploy, certifique-se de que possui: <br>
 
 <br>
 
-     ```
+
      pip install boto3
      
-     ```
+
      
 <br>
 
