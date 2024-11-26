@@ -4,7 +4,7 @@ class User(db.Model):
     __tablename__ = 'users'
     __table_args__ = {'schema': 'shipay_db'}  
 
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)

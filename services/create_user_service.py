@@ -6,7 +6,6 @@ from models.user_claim import UserClaim
 from db import db
 from services.generate_password_service import generate_password
 
-
 def create_user(data):
     try:
         
@@ -26,13 +25,8 @@ def create_user(data):
         if not role:
             return jsonify({"error": f"Sorry, we couldn't find a role with ID {role_id}."}), 404
 
-        
-        try:
-            password = data.get('password', generate_password())
-        except Exception as e:
-            return jsonify({"error": "Couldn't generate a password. Please try again.", "details": str(e)}), 500
+        password = data.get('password', generate_password())
 
-        
         new_user = User(
             name=name,
             email=email,
@@ -40,21 +34,22 @@ def create_user(data):
             role_id=role_id,
             created_at=db.func.current_date()
         )
+        
         try:
             db.session.add(new_user)
-            db.session.flush()
+            db.session.flush()  
         except Exception as e:
             db.session.rollback()
             return jsonify({"error": "We hit a snag while saving the new user to the database.", "details": str(e)}), 500
-
         
         try:
-            claim = db.session.query(Claim).first()
+            claim = db.session.query(Claim).filter_by(id=role_id).first()
         except Exception as e:
             db.session.rollback()
-            return jsonify({"error": "Something went wrong while fetching the claim. Mind checking again?", "details": str(e)}), 500
+            return jsonify({"error": "Something went wrong while fetching the correct claim.", "details": str(e)}), 500
 
         if claim:
+            
             try:
                 user_claim = UserClaim(user_id=new_user.id, claim_id=claim.id)
                 db.session.add(user_claim)
@@ -62,7 +57,6 @@ def create_user(data):
                 db.session.rollback()
                 return jsonify({"error": "Couldn't link the claim to the user. Let's check what went wrong.", "details": str(e)}), 500
 
-        
         try:
             db.session.commit()
         except Exception as e:
